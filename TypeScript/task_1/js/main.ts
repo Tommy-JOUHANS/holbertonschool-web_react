@@ -20,6 +20,25 @@ const printTeacher: printTeacherFunction = (
   return `${firstName.charAt(0)}. ${lastName}`;
 };
 
+
+class StudentClass {
+  fstStudent: string;
+  lastStudent: string;
+
+  constructor(firstName: string, lastName: string) {
+    this.fstStudent = firstName;
+    this.lastStudent = lastName;
+  }
+
+  workOnHomework(): string {
+    return 'Currently working';
+  }
+
+  displayName(): string {
+    return this.fstStudent;
+  }
+}
+
 const director1: Directors = {
   firstName: 'John',
   lastName: 'Doe',
@@ -30,3 +49,7 @@ const director1: Directors = {
 
 console.log(director1);
 console.log(printTeacher("John", "Doe"));
+
+const student1 = new StudentClass("Tommy", "JOUHANS");
+console.log(student1.displayName());
+console.log(student1.workOnHomework());
