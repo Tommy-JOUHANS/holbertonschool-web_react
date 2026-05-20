@@ -1,44 +1,17 @@
-interface DirectorInterface {
-  workFromHome() : string;
-  getCoffeeBreak() : string;
-  workDirectoryTasks() : string;
+export interface DirectorInterface {
+  workFromHome(): string;
+  getCoffeeBreak(): string;
+  workDirectorTasks(): string;
 }
 
-interface TeacherInterface {
-  workFromHome() : string;
-  getCoffeeBreak() : string;
-  workTeacherTasks() : string; 
+export interface TeacherInterface {
+  workFromHome(): string;
+  getCoffeeBreak(): string;
+  workTeacherTasks(): string;
 }
 
-// Classe Professeur
-class Teacher implements TeacherInterface {
-  salary: number | string;
-
-  constructor(salary: number | string) {
-    this.salary = salary;
-  }
-
+export class Director implements DirectorInterface {
   workFromHome(): string {
-    return 'Cannot work from home';
-  }
-
-  getCoffeeBreak(): string {
-    return 'Working from home';
-  }
-
-  workTeacherTasks(): string {
-    return 'Getting to work';
-  }
-}
-
-// Classe Directeur
-class Director implements DirectorInterface {
-  salary: number | string;
-
-  constructor(salary: number | string) {
-    this.salary = salary;
-  }
-   workFromHome(): string {
     return 'Working from home';
   }
 
@@ -46,33 +19,54 @@ class Director implements DirectorInterface {
     return 'Getting a coffee break';
   }
 
-  workDirectoryTasks(): string {
+  workDirectorTasks(): string {
     return 'Getting to director tasks';
   }
 }
 
-/**
- * Crée un employé en fonction de son salaire.
- * - Si le salaire est un nombre et inférieur à 500, retourne un Professeur.
- * - Sinon, retourne un Directeur.
- *
- * @param salaire - Le salaire de l'employé (nombre ou chaîne de caractères).
- * @returns Une instance de Professeur ou de Directeur.
- */
-function createEmployee(salary: number | string): Teacher | Director {
-  if (typeof salary === "number" && salary < 500) {
-    return new Teacher(salary);
+export class Teacher implements TeacherInterface {
+  workFromHome(): string {
+    return 'Cannot work from home';
   }
-  return new Director(salary);
+
+  getCoffeeBreak(): string {
+    return 'Cannot have a break';
+  }
+
+  workTeacherTasks(): string {
+    return 'Getting to work';
+  }
 }
 
-// Exemples d'utilisation
-const employe1 = createEmployee(200);    // Professeur (nombre < 500)
-const employe2 = createEmployee(1000);   // Directeur (nombre >= 500)
-const employe3 = createEmployee("$500"); // Directeur (chaîne de caractères)
+export function createEmployee(
+  salary: number | string
+): Director | Teacher {
+  if (typeof salary === 'number' && salary < 500) {
+    return new Teacher();
+  }
 
-console.log(employe1 instanceof Teacher); // true
-console.log(employe2 instanceof Director);  // true
-console.log(employe3 instanceof Director);  // true
+  return new Director();
+}
 
-export { Teacher, Director, createEmployee };
+export function isDirector(
+  employee: Director | Teacher
+): employee is Director {
+  return employee instanceof Director;
+}
+
+export function executeWork(
+  employee: Director | Teacher
+): string {
+  if (isDirector(employee)) {
+    return employee.workDirectorTasks();
+  }
+
+  return employee.workTeacherTasks();
+}
+
+// Tests
+console.log(executeWork(createEmployee(200)));
+// Getting to work
+
+console.log(executeWork(createEmployee(1000)));
+// Getting to director tasks

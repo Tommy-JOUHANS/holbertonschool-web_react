@@ -153,3 +153,30 @@ les classes
 l’héritage de contrats (implements)
 les unions de types
 le polymorphisme
+
+## Task 6 - Creating functions specific to employees
+
+In this task, we create two functions that work with the `Director` and `Teacher` classes.
+
+### 1. The `isDirector` function
+
+The `isDirector` function checks if an employee is an instance of the `Director` class.
+
+```ts
+export function isDirector(
+  employee: Director | Teacher
+): employee is Director {
+  return employee instanceof Director;
+}
+
+The function accepts an employee argument.
+The type Director | Teacher means the employee can be either a Director or a Teacher.
+instanceof Director checks if the object was created from the Director class.
+employee is Director is a TypeScript type predicate.
+This helps TypeScript understand that inside the condition, the employee is a Director.
+
+The function accepts an employee argument.
+The type Director | Teacher means the employee can be either a Director or a Teacher.
+instanceof Director checks if the object was created from the Director class.
+employee is Director is a TypeScript type predicate.
+This helps TypeScript understand that inside the condition, the employee is a Director.
