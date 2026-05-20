@@ -181,7 +181,7 @@ instanceof Director checks if the object was created from the Director class.
 employee is Director is a TypeScript type predicate.
 This helps TypeScript understand that inside the condition, the employee is a Director.
 
-# Task 8: 8. Ambient Namespaces
+# Task 7. String literal types
 # Explication du code TypeScript — Interfaces, Type Predicates et String Literal Types
  
 Ce fichier TypeScript illustre plusieurs concepts fondamentaux : les **interfaces**, les **classes**, les **type guards (prédicats de type)**, et les **types littéraux**. Voici une explication détaillée de chaque partie en lien avec l'énoncé.
