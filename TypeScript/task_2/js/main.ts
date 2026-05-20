@@ -64,9 +64,35 @@ export function executeWork(
   return employee.workTeacherTasks();
 }
 
+export type Subjects = ('Math' | 'History');
+
+export function teachClass(todayClass: Subjects) {
+  if (todayClass === 'Math') {
+    return 'Teaching Math';
+  }
+  if (todayClass === 'History') {
+    return 'Teaching History';
+  }
+}
+
+console.log(createEmployee(200));
+//Teacher
+console.log(createEmployee(1000));
+//Director
+console.log(createEmployee('$500'));
+//Director
+
 // Tests
 console.log(executeWork(createEmployee(200)));
 // Getting to work
 
 console.log(executeWork(createEmployee(1000)));
 // Getting to director tasks
+
+// Tests
+console.log(teachClass('Math'));
+// Teaching Math
+
+
+console.log(teachClass('History'));
+// Teaching History
