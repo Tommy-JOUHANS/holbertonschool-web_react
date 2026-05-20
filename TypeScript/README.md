@@ -1,73 +1,137 @@
-# Résumé — Task 4 : Namespaces & Declaration Merging (TypeScript)
+# Résumé du projet TypeScript — holbertonschool-web_react
 
-## Ce que demandait l'énoncé
+Projet **holbertonschool-web_react**, dossier `TypeScript`. Six tâches
+(`task_0` à `task_5`) qui introduisent progressivement le typage TypeScript,
+de l'interface de base jusqu'au typage nominal. Chaque tâche est compilée avec
+**webpack 4 + ts-loader** et servie par **webpack-dev-server**.
 
-Créer un dossier `task_4/` avec, dans `js/subjects/`, cinq fichiers TypeScript utilisant un **namespace `Subjects`** et la technique du **declaration merging** (fusion de déclarations).
+## Vue d'ensemble
 
-| Fichier | Contenu attendu |
-|---|---|
-| `Teacher.ts` | Interface `Teacher` avec `firstName` et `lastName` (string) |
-| `Subject.ts` | Classe `Subject` avec un attribut `teacher` et un setter `setTeacher` |
-| `Cpp.ts` | Ajoute `experienceTeachingC?` (number) à `Teacher` + classe `Cpp` avec `getRequirements()` et `getAvailableTeacher()` |
-| `Java.ts` | Ajoute `experienceTeachingJava?` (number) à `Teacher` + classe `Java` avec les mêmes méthodes |
-| `React.ts` | Ajoute `experienceTeachingReact?` (number) à `Teacher` + classe `React` avec les mêmes méthodes |
+| Tâche    | Thème                            | Notions clés                                                        |
+|----------|----------------------------------|---------------------------------------------------------------------|
+| `task_0` | Interface d'un étudiant          | `interface`, typage du DOM                                          |
+| `task_1` | Interface `Teacher`              | `readonly`, propriété optionnelle, index signature, héritage         |
+| `task_2` | Advanced types Part 1            | `implements`, types union, type predicate, string literal type      |
+| `task_3` | Ambient namespaces               | fichiers `.d.ts`, `declare`, triple-slash `/// <reference />`        |
+| `task_4` | Namespace & Declaration merging  | `namespace`, fusion de déclarations                                 |
+| `task_5` | Brand convention & Nominal typing| typage structurel vs nominal, propriété `brand`                     |
 
-**Principe clé :** chaque fichier `Cpp` / `Java` / `React` redéclare le namespace `Subjects` et ajoute une propriété optionnelle à l'interface `Teacher`. TypeScript fusionne automatiquement toutes ces déclarations en une seule interface — c'est ça le **declaration merging**.
+## task_0 — Créer une interface pour un étudiant
 
-Comportement des méthodes :
+**Objectif :** premiers pas avec les interfaces et le typage du DOM.
 
-- `getRequirements()` retourne `Here is the list of requirements for <matière>`.
-- `getAvailableTeacher()` retourne `Available Teacher: <prénom>` si le professeur a de l'expérience dans la matière, sinon `No available teacher`.
+- Interface `Student` : `firstName`, `lastName` (string), `age` (number),
+  `location` (string).
+- Créer deux objets `student1` et `student2`, regroupés dans
+  `studentsList: Student[]`.
+- Construire un tableau HTML (`<table>`) en JavaScript vanilla et l'insérer
+  dans le DOM ; chaque ligne affiche le prénom et la localisation.
 
-## Les problèmes rencontrés et leurs corrections
+**Notions :** déclaration d'`interface`, typage des éléments du DOM
+(`HTMLTableElement`, `HTMLTableRowElement`, `HTMLTableCellElement`).
 
-### 1. `tsconfig.json` cassé (JSON invalide)
+## task_1 — Construire une interface `Teacher`
 
-Le fichier contenait **deux blocs `compilerOptions`**, ce qui rend le JSON invalide. Correction : tout fusionner dans un seul bloc, et ajouter quelques options.
+**Objectif :** explorer les fonctionnalités avancées des interfaces.
 
-```json
-{
-  "compilerOptions": {
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "noImplicitAny": true,
-    "module": "es6",
-    "target": "es5",
-    "allowJs": true,
-    "moduleResolution": "node",
-    "typeRoots": ["./node_modules/@types"],
-    "types": [],
-    "skipLibCheck": true
-  },
-  "include": ["js/**/*"],
-  "exclude": ["node_modules", "dist"]
-}
-```
+- Interface `Teacher` : `firstName` et `lastName` en **`readonly`**,
+  `fullTimeEmployee` (boolean), `yearsOfExperience?` **optionnel** (number),
+  `location` (string), et une **index signature** `[attribute: string]: any`
+  pour autoriser des propriétés supplémentaires.
+- Interface `Directors` qui **étend** `Teacher` et ajoute `numberOfReports`.
+- Fonction `printTeacher` décrite par une **interface de fonction**
+  `printTeacherFunction` : renvoie l'initiale du prénom + le nom (`"J. Doe"`).
+- Classe `StudentClass` décrite par une interface de méthodes
+  (`workOnHomework`, `displayName`) et une interface de **constructeur**.
 
-### 2. Erreurs de compilation venant de `node_modules`
+**Notions :** `readonly`, propriétés optionnelles, index signatures, extension
+d'interface, interfaces de fonction et de classe/constructeur.
 
-La version de TypeScript installée était trop ancienne pour lire la syntaxe moderne des packages `@types` (`@types/babel__traverse`, `minimatch`...). Ce ne sont pas des erreurs du code de l'exercice.
+## task_2 — Advanced types Part 1
 
-Correction : `"types": []` empêche le chargement automatique de tous les `@types`, et `"include": ["js/**/*"]` limite la compilation au dossier de code source. `tsc` ne compile alors que le code de l'exercice.
+**Objectif :** classes, types union et gardes de type.
 
-### 3. Code des classes
+- Interfaces `DirectorInterface` et `TeacherInterface` (méthodes `workFromHome`,
+  `getCoffeeBreak`, et tâches spécifiques au rôle).
+- Classes `Director` et `Teacher` qui **implémentent** ces interfaces.
+- Fonction `createEmployee(salary: number | string)` qui renvoie un `Director`
+  ou un `Teacher` selon le salaire (un nombre < 500 → `Teacher`).
+- **Type predicate** `isDirector(employee): employee is Director` pour affiner
+  le type, utilisé par `executeWork`.
+- **String literal type** `Subjects = 'Math' | 'History'` et fonction
+  `teachClass`.
 
-Le test `experienceTeachingC <= 0` a été remplacé par `!this.teacher.experienceTeachingC`. L'attribut étant optionnel, il peut valoir `undefined`, et `undefined <= 0` renvoie `false` (ce qui laissait passer un professeur sans expérience). Le `!` couvre `undefined`, `0` et `null`.
+**Notions :** `implements`, types union, type predicates (`is`), string literal
+types.
 
-## Résultat final
+## task_3 — Ambient namespaces
 
-La compilation TypeScript réussit : la sortie webpack affichait elle-même **`No type errors found`**.
+**Objectif :** consommer une « bibliothèque » externe sans son code source,
+uniquement via des déclarations de types.
 
-Côté Holberton, l'exercice est **validé** — le checker vérifie le contenu des fichiers et que `tsc` compile, ce qui est le cas.
+- `crud.d.ts` : fichier de **déclaration ambiante** (`declare`) décrivant
+  l'API CRUD.
+- `interface.ts` : types `RowID` et `RowElement`.
+- `main.ts` : directive **triple-slash** `/// <reference path="./crud.d.ts" />`,
+  import des types et du module `crud`, puis appels `insertRow`, `updateRow`,
+  `deleteRow`.
 
-## L'erreur dans la console du navigateur (`Subjects is not defined`)
+**Notions :** fichiers `.d.ts`, mot-clé `declare`, namespaces ambiants,
+directives `/// <reference />`.
 
-Ce **n'est pas** une erreur du code et ça **ne compte pas** dans la note.
+## task_4 — Namespace & Declaration merging
 
-- Webpack n'a bundlé que `main.ts` (visible dans son log : `[./js/main.ts] 830 bytes [built]` — les fichiers `subjects/*.ts` n'y apparaissent pas).
-- Les directives `/// <reference ... />` servent au compilateur TypeScript, mais sont **ignorées par webpack** : webpack ne bundle un fichier que s'il est atteint par un `import` ou `require`.
-- Les namespaces TypeScript ont besoin d'une **portée globale** pour fusionner entre fichiers, alors que webpack **isole chaque module** dans sa propre portée. C'est une incompatibilité du template du projet, pas une faute dans le code.
+**Objectif :** organiser le code dans un namespace et fusionner des
+déclarations réparties sur plusieurs fichiers.
 
-## Conclusion
+- Dossier `js/subjects/` avec cinq fichiers dans le namespace **`Subjects`** :
+  - `Teacher.ts` — interface `Teacher` (`firstName`, `lastName`).
+  - `Subject.ts` — classe `Subject` avec un attribut `teacher` et un setter
+    `setTeacher`.
+  - `Cpp.ts`, `Java.ts`, `React.ts` — chacune **redéclare** le namespace pour
+    ajouter une propriété optionnelle à `Teacher`
+    (`experienceTeachingC` / `experienceTeachingJava` / `experienceTeachingReact`)
+    et définit une classe avec `getRequirements()` et `getAvailableTeacher()`.
+- `getAvailableTeacher()` renvoie le professeur s'il a de l'expérience dans la
+  matière, sinon `No available teacher`.
 
-**Task 4 est terminé.** La compilation `tsc` passe sans erreur et les fichiers respectent l'énoncé. L'erreur de la console du navigateur peut être ignorée. Étape suivante : passer au task suivant.
+**Principe clé :** TypeScript fusionne automatiquement toutes les
+redéclarations du namespace `Subjects` et de l'interface `Teacher` en une
+seule entité — c'est le **declaration merging**.
+
+## task_5 — Brand convention & Nominal typing
+
+**Objectif :** simuler un typage **nominal** là où TypeScript est **structurel**.
+
+- Interfaces `MajorCredits` et `MinorCredits` : un nombre `credits` + une
+  propriété **`brand`** distincte (`'brandA'` / `'brandB'`).
+- Fonctions `sumMajorCredits` et `sumMinorCredits` : additionnent les `credits`
+  des deux sujets et renvoient le type correspondant.
+- Sans `brand`, les deux interfaces (mêmes champs) seraient interchangeables.
+  Le `brand` leur donne une signature unique : passer un `MinorCredits` à
+  `sumMajorCredits` provoque alors une erreur de compilation.
+
+**Notions :** typage structurel vs nominal, brand convention.
+
+## Stack technique commune
+
+- **TypeScript** compilé vers **ES5**.
+- **webpack 4** + **ts-loader** pour le bundling, **webpack-dev-server** pour le
+  serveur de développement.
+- Scripts : `npm run start-dev` (serveur de dev), `npm run build` (build).
+- Chaque tâche possède ses propres `package.json`, `tsconfig.json` et
+  `webpack.config.js`.
+
+## Points de configuration importants
+
+Leçons tirées des problèmes rencontrés (notamment sur `task_4` et `task_5`) :
+
+- Le `tsconfig.json` ne doit contenir **qu'un seul** bloc `compilerOptions`
+  (sinon le JSON est invalide).
+- `"types": []` + `"include": ["js/**/*"]` empêchent `tsc` de compiler les
+  paquets `@types` de `node_modules` (souvent trop récents pour la version de
+  TypeScript du projet) et limitent la compilation au code source de l'exercice.
+- Toujours lancer **`npx tsc`** (le compilateur local du projet) et jamais un
+  `tsc` installé globalement, pour éviter les conflits de version.
+- Garder les versions de `package.json` cohérentes avec la version de
+  TypeScript du projet (ex. `@types/node` v12 pour TypeScript 3.x).
