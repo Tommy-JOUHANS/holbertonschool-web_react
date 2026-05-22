@@ -1,14 +1,25 @@
 {
   "compilerOptions": {
+    "rootDir": "./js",
     "outDir": "./dist/",
-    "rootDir": "./js/",
-    "sourceMap": true,
     "noImplicitAny": true,
-    "module": "es6",
-    "target": "es5",
+    "module": "ESNext",
+    "target": "ES2017",
+    "jsx": "react",
     "allowJs": true,
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "lib": ["DOM", "ES2017"],
+    "types": [],
+    "ignoreDeprecations": "5.0"
   },
-  "include": ["./js/**/*"]
+  "include": ["js/**/*"],
+  "exclude": ["node_modules"]
 }
