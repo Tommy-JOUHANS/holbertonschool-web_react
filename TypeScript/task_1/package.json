@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node dist/main.js",
-    "build": "tsc",
+    "start": "webpack serve",
+    "build": "webpack",
     "dev": "tsc --watch"
   },
   "author": "",
