@@ -1,20 +1,21 @@
-/// <reference path="./Subject.ts" />
+import { Subjects as S } from './Subject';
 
-namespace Subjects {
-  export interface Teacher {
+export namespace Subjects {
+  export interface Teacher extends S.Teacher {
     experienceTeachingJava?: number;
   }
 
-  export class Java extends Subjects.Subject {
+  export class Java extends S.Subject {
     getRequirements(): string {
       return 'Here is the list of requirements for Java';
     }
 
     getAvailableTeacher(): string {
-      if (!this.teacher || !this.teacher.experienceTeachingJava) {
+      const teacher = this.teacher as Teacher;
+      if (!teacher || !teacher.experienceTeachingJava) {
         return 'No available teacher';
       }
-      return `Available Teacher: ${this.teacher.firstName}`;
+      return `Available Teacher: ${teacher.firstName}`;
     }
   }
 }
