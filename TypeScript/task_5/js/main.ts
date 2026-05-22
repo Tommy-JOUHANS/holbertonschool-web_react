@@ -15,3 +15,12 @@ function sumMajorCredits(subject1: MajorCredits, subject2: MajorCredits): MajorC
 function sumMinorCredits(subject1: MinorCredits, subject2: MinorCredits): MinorCredits {
 	return { credits: subject1.credits + subject2.credits, brand: 'brandB' };
 }
+
+// Test
+const major1: MajorCredits = { credits: 3, brand: 'brandA' };
+const major2: MajorCredits = { credits: 4, brand: 'brandA' };
+console.log(sumMajorCredits(major1, major2));
+
+const minor1: MinorCredits = { credits: 2, brand: 'brandB' };
+const minor2: MinorCredits = { credits: 1, brand: 'brandB' };
+console.log(sumMinorCredits(minor1, minor2));
